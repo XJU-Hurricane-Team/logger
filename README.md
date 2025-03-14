@@ -73,4 +73,6 @@
 
 ```
 
+![RTT](assets/jlink-rtt.png)
+
 仅 JLink 支持此方式。
