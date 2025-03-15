@@ -1,12 +1,10 @@
 /**
  * @file    logger.h
  * @author  Deadline039
- * @brief   日志错误系统
+ * @brief   日志记录系统
  * @version 1.2
  * @date    2024-03-25
  * @see     https://www.bilibili.com/video/av1250963900/?p=89
- * @note    如果使用文件记录, 需要使用 FATFS 文件读写支持
- *          如果使用日期时间的方式记录, 需要 RTC 时钟支持
  *
  ******************************************************************************
  *    Date    | Version |   Author    | Version Info
@@ -14,7 +12,8 @@
  * 2024-04-01 |   1.0   | Deadline039 | 初版
  * 2024-04-04 |   1.1   | Deadline039 | 更改 LOG_ENABLE 宏, 如果关闭此宏开关, 
  *            |         |             | 日志函数会变为空函数
- * 2525-03-14 |   1.2   | Deadline039 | 修改输出接口, 所有缓冲区
+ * 2525-03-14 |   1.2   | Deadline039 | 修改输出接口和获取时间接口, 缓冲区加信号量保护, 
+ *            |         |             | 修改部分宏定义, 移除 RTC 与 FATFS. 
  */
 
 #ifndef __LOGGER_H
@@ -64,7 +63,7 @@
 
 #if LOG_SHOW_RUNNING_TIME
 /* 获取时间函数头文件 */
-#define LOG_GET_RUNNING_TIME_HEADER_FILE "stm32f4xx_hal.h"
+#define LOG_GET_RUNNING_TIME_HEADER_FILE <bsp.h>
 /* 获取时间函数, 返回值需要是微秒 */
 #define LOG_GET_RUNNING_TIME()           HAL_GetTick()
 #endif /* LOG_SHOW_RUNNING_TIME */
