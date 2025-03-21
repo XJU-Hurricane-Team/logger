@@ -99,7 +99,7 @@ void log_message(log_level_t level, char *format, ...) {
               sizeof(log_buffer) - string_length, (const char *)format, args);
     va_end(args);
 
-    strcat((char *)log_buffer, LOG_OUTPUT_NEWLINE);
+    strncat((char *)log_buffer, LOG_OUTPUT_NEWLINE, sizeof(log_buffer));
     string_length = strlen((char *)log_buffer);
     char *log_output_buf = log_buffer;
 
