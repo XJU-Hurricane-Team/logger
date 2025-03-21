@@ -1,8 +1,10 @@
 # 日志系统
 
-此示例用于展示日志的使用方法，使用非常简单，只需要调用`log_message()`函数即可。第一个参数为等级，第二个参数为输出的内容，格式与`printf`一致。
+日志记录系统。使用非常简单，只需要调用`log_message()`函数即可。第一个参数为等级，第二个参数为输出的内容，格式与`printf`一致。
 
 使用`log_set_level()`可以设置输出等级；`log_get_level()`可以获取日志当前等级。
+
+示例工程：[https://github.com/XJU-Hurricane-Team/logger/tree/f429-rtos-demo](https://github.com/XJU-Hurricane-Team/logger/tree/f429-rtos-demo)
 
 支持线程安全处理。只需要打开`LOG_USE_RTOS`宏即可，目前仅支持 FreeRTOS。
 
