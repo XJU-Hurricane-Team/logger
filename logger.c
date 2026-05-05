@@ -1,15 +1,14 @@
 /**
  * @file    logger.c
- * @author  Deadline039
+ * @author  Deadline039 PickingChip
  * @brief   日志记录系统
- * @version 1.2
+ * @version 1.3
  * @date    2024-03-25
  * @see     https://www.bilibili.com/video/av1250963900/?p=89
  */
 
 #include "logger.h"
-
-#include LOG_OUTPUT_STREAM_HEADER_FILE
+#include <bsp.h>
 
 #if LOG_SHOW_RUNNING_TIME
 #include LOG_GET_RUNNING_TIME_HEADER_FILE
@@ -20,6 +19,10 @@
 #include "semphr.h"
 static SemaphoreHandle_t buf_semp;
 #endif /* LOG_USE_RTOS */
+
+#if LOG_OUTPUT_TYPE == 1
+#include "SEGGER_RTT.h"       /* RTT 头文件 */
+#endif /* LOG_OUTPUT_TYPE == 1 */
 
 #include <stdlib.h>
 #include <string.h>
@@ -50,6 +53,10 @@ void log_init(log_level_t init_level) {
     buf_semp = xSemaphoreCreateBinary();
 #endif /* LOG_USE_MUTEX */
 #endif /* LOG_USE_RTOS */
+
+#if LOG_OUTPUT_TYPE == 1
+    SEGGER_RTT_ConfigUpBuffer(0, "RTT LOGGER OUTPUT", NULL, 0, SEGGER_RTT_MODE_NO_BLOCK_TRIM); // 配置 RTT 通道 0 用于日志输出，使用非阻塞模式`
+#endif /* LOG_OUTPUT_TYPE == 1 */ 
 }
 
 /**
@@ -99,7 +106,7 @@ void log_message(log_level_t level, char *format, ...) {
               sizeof(log_buffer) - string_length, (const char *)format, args);
     va_end(args);
 
-    strncat((char *)log_buffer, LOG_OUTPUT_NEWLINE, sizeof(log_buffer));
+    strncat((char *)log_buffer, LOG_OUTPUT_NEWLINE, sizeof(log_buffer) - strlen(log_buffer) - 1);
     string_length = strlen((char *)log_buffer);
     char *log_output_buf = log_buffer;
 
